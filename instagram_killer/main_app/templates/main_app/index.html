@@ -1,9 +1,29 @@
-{% if posts %}
+{% extends "main_app/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+    <a href="{% url 'post' %}">
+        <img src="{% static 'main_app/Instagrampost.webp' %}" width="100" alt="My image">
+    </a>
+
+    {% if posts %}
     <ul>
         {% for post in posts %}
-            <li><a href="/app/{{post.id}}">{{ post.post_text }}</a> {{ user }}</li>
+        <li>
+            <div>
+                <h3>{{ post.post_text }}</h3> {{ post.author }} {{post.publish_at|date}}
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary" href="{% url 'post_update' post.id %}">UPDATE</a>
+                    <a class="btn btn-primary" href="{% url 'post_delete' post.id %}">DELETE</a>
+                {% endif %}
+            </div>
+        </li>
         {% endfor %}
     </ul>
-{% else %}
-    <h2> Не має </h2>
-{% endif %}
+    {% else %}
+    <h2> Відсутні </h2>
+    {% endif %}
+  
+{% endblock content %}
